@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>RCD SAN ANTONIO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <div id="loader" class="loader hidden">
+    <div class="loader-box" id="loaderContent">
+      <div class="spinner" id="spinner"></div>
+      <p id="loaderText">Procesando solicitud...</p>
+      <button id="resetFormBtn" class="hidden" type="button">Enviar nueva solicitud</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <header class="page-header">
+      <div class="top_header">
+        <img src="img/Encabezado.jpg" alt="Encabezado">
+      </div>
+    </header>
+
+    <form id="formRCD" novalidate>
+      <div class="form-header">
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="header-text-container">
+          <h1>Formulario de Solicitud de Certificados</h1>
+        </div>
+      </div>
+
+      <section class="step active" data-step="1">
+        <div class="info-box">
+          <h3>📄 Instrucciones Iniciales</h3>
+          <ul>
+            <li>Debe diligenciarse <strong>un formulario por cada obra</strong>, con su <strong>PIN ambiental
+                independiente</strong>, y relacionar
+              únicamente los vales correspondientes a esa obra.
+            </li>
+            <li>Los vales adjuntados deben ir escaneados en orden de fecha y/o consecutivo, de lo contrario,
+              <strong>NO</strong> será
+              tenida en cuenta su solicitud.
+            </li>
+            <li>Revise cuidadosamente la cantidad de vales antes de enviar la solicitud, ya que <strong>no se podrán
+                agregar vales posteriormente</strong> al certificado expedido.</li>
+            <li>Para solicitudes de <strong>una misma obra en diferentes meses</strong>, debe realizarse <strong>un
+                formulario
+                por cada mes.</strong> Una vez generado el certificado, <strong>no se aceptan cambios ni divisiones de
+                viajes</strong>.</li>
+            <li>No se reciben solicitudes para certificar vales correspondientes a viajes realizados en el año 2022.
+            </li>
+            <li>El medio de comunicación será el correo <strong>sanantoniorcd@gmail.com</strong>
+              y el celular <strong>3213101158</strong>.</li>
+          </ul>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group col-6">
+            <label for="correo_adicional">Correo Electrónico de Contacto</label>
+            <input type="email" id="correo_adicional" name="correo_adicional" placeholder="ejemplo@gmail.com"
+              required />
+            <span class="error-msg"></span>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="legal-text">
+              <p><strong>Autorización:</strong> Autorizo de manera voluntaria a INGEOMINERIA OUTSOURCING SAS, para
+                tratar mis datos personales de acuerdo con su Política de Tratamiento de Datos Personales, y las
+                siguientes finalidades: Formalizar la inscripción y registro de clientes, proveedores y/o contratistas
+                en la organización; administrar el desarrollo de la relación comercial; mantener una eficiente
+                comunicación durante el desarrollo de la relación comercial; así como evaluar la calidad de los
+                servicios ofrecidos por la organización; proporcionar información de interés; informar del portafolio de
+                servicios y promociones de la organización, y en general todas aquellas finalidades que sean necesarias
+                para el desarrollo de mi relación con la organización. La autorización la otorgo por el tiempo necesario
+                para cumplir con las finalidades mencionadas en este documento, teniendo en cuenta las circunstancias
+                legales o contractuales que hagan necesario el tratamiento. La organización podrá recolectar, almacenar,
+                utilizar, circular, suprimir y en general, tratar mis datos personales conforme a las finalidades
+                anunciadas y su Política de Tratamiento de Datos Personales, la cual fue puesta a mi disposición con el
+                envío de este formulario, y de la cual cualquier cambio será informado.
+              </p>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" id="autorizacion_datos" name="autorizacion_datos" required />
+              <label for="autorizacion_datos">He leído y autorizo el tratamiento de datos</label>
+              <span class="error-msg block"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions right">
+          <button type="button" class="btn next">Comenzar Solicitud</button>
+        </div>
+      </section>
+
+      <section class="step" data-step="2">
+        <h2>DATOS DE LA OBRA Y VIAJES</h2>
+        <p class="subtitle">En esta sección se deberá suministrar la información de la obra, como nombre y PIN ambiental
+          así como la
+          contenida en los vales entregados al transportador el día que se realizó la disposición en las instalaciones
+          de la Escombrera San Antonio.
+        </p>
+
+        <h3>Empresa Generadora del RCD (Dato que aparecerá en el certificado)</h3>
+        <div class="form-grid">
+          <div class="form-group col-8">
+            <label>Nombre Empresa</label>
+            <input type="text" name="empresa_generadora" required placeholder="Razón social completa" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-4">
+            <label>NIT</label>
+            <input type="text" name="nit_generadora" required placeholder="Ej: 90000000-1" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-6">
+            <label>Correo para certificado</label>
+            <input type="email" name="correo_certificado_generadora" required placeholder="ejemplo@empresa.com" />
+            <span class="error-msg"></span>
+          </div>
+        </div>
+
+        <h3>Datos de la Obra</h3>
+        <div class="form-grid">
+          <div class="form-group col-8">
+            <label>Nombre o ID de la Obra</label>
+            <input type="text" name="obra_identificacion" required placeholder="Ej: San Jorge - Torre 1" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-4">
+            <label>No. PIN Ambiental</label>
+            <input type="text" name="pin_ambiental" placeholder="Ej: 2024001" />
+          </div>
+          <div class="form-group col-12">
+            <label>Dirección de la Obra</label>
+            <input type="text" name="direccion_obra" required placeholder="Calle 100 # 15-20, Bogotá" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-6">
+            <label>Nombre Encargado</label>
+            <input type="text" name="contacto_nombre_obra" required placeholder="Nombre del encargado de obra" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-6">
+            <label>Teléfono Encargado</label>
+            <input type="number" name="contacto_telefono_obra" required placeholder="Ej: 3101234567" />
+            <span class="error-msg"></span>
+          </div>
+        </div>
+
+        <h3>Vales y Fechas</h3>
+        <div class="form-grid">
+          <div class="form-group col-3">
+            <label>Cant. Vales</label>
+            <input name="cantidad_vales" type="number" required placeholder="0" style="text-align: center;" />
+            <span class="error-msg"></span>
+          </div>
+
+          <div class="form-group col-4">
+            <label>Fecha Inicial (Desde)</label>
+            <input type="date" name="fecha_desde" id="fecha_desde" required />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-4">
+            <label>Fecha Final (Hasta)</label>
+            <input type="date" name="fecha_hasta" id="fecha_hasta" required />
+            <span class="error-msg"></span>
+          </div>
+        </div>
+
+        <h3>Contrato IDU</h3>
+        <div class="form-grid">
+          <div class="form-group col-6">
+            <label>¿Se solicita certificado para contrato IDU? </label>
+            <div class="radio-group" style="margin-top: 10px;">
+              <label><input type="radio" name="contrato_idu" value="Sí" required> Sí</label>
+              <label><input type="radio" name="contrato_idu" value="No"> No</label>
+            </div>
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-6">
+            <label>Número de contrato y año</label>
+            <input type="text" name="numero_contrato_idu" placeholder="Diligenciar solo si aplica (o N/A)" />
+          </div>
+        </div>
+
+        <h3>Soportes</h3>
+        <div class="form-grid">
+          <div class="form-group col-12 file-input-group">
+            <label>1. Información de viajes (Excel)</label>
+            <small>Digitar en un archivo excel (unico formato permitido) las casillas: FECHA | No. VALE | PLACA
+              VEHÍCULO. Nombre del archivo: Número de PIN de la obra. </small>
+            <small>Si no esta nombrado así no será posible identificar los vales relacionados y por lo tanto, no se
+              podrá expedir el certificado.</small>
+            <input type="file" name="info_viajes" accept=".xlsx" required />
+            <span class="error-msg"></span>
+          </div>
+
+          <div class="form-group col-12 file-input-group">
+            <label>2. Vales Escaneados (PDF)</label>
+            <small>En un solo PDF. Únicamente se certifican viajes donde el vale contenga toda la información completa,
+              incluidos los sellos de cajas y portería. NO se certifican vales que se adjunten tachados, remarcados o
+              modificados. (Escanear los vales en orden de numeración)</small>
+            <input type="file" name="vales_escaneados" accept="application/pdf" required />
+            <span class="error-msg"></span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn prev">Atrás</button>
+          <button type="button" class="btn next">Siguiente</button>
+        </div>
+      </section>
+
+      <section class="step" data-step="3">
+        <h2>Información Adicional</h2>
+
+        <div class="form-grid">
+          <div class="form-group col-4">
+            <label>¿Requiere Anexo II?</label>
+            <div class="radio-group" style="margin-top: 10px;">
+              <label><input type="radio" name="requiere_anexo_ii" value="Sí" required> Sí</label>
+              <label><input type="radio" name="requiere_anexo_ii" value="No"> No</label>
+            </div>
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-8">
+            <label>Datos Anexo II (Razón Social y NIT)</label>
+            <input type="text" name="anexo_ii_info" placeholder="Diligenciar solo si aplica (o N/A)" />
+          </div>
+        </div>
+
+        <h3>Representante Legal</h3>
+        <div class="form-grid">
+          <div class="form-group col-8">
+            <label>Nombre Completo</label>
+            <input type="text" name="representante_legal" required placeholder="Nombre completo del representante" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-4">
+            <label>Teléfono</label>
+            <input type="text" name="telefono" required placeholder="Ej: 601 1234567" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-12">
+            <label>Dirección Domicilio</label>
+            <input type="text" name="direccion_domicilio" required placeholder="Dirección de correspondencia de la empresa" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-6">
+            <label>Correo Electrónico</label>
+            <input type="email" name="correo" required placeholder="correo@representante.com" />
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-group col-6">
+            <label>Dirección Generación RCD</label>
+            <input type="text" name="direccion_generacion_rcd" required required placeholder="Lugar donde se originó el residuo" />
+            <span class="error-msg"></span>
+          </div>
+        </div>
+
+        <h3>Observaciones</h3>
+        <div class="form-grid">
+          <div class="form-group col-12">
+            <label>Comentarios adicionales</label>
+            <textarea name="observaciones" rows="4"
+              placeholder="Si tiene aclaraciones, solicitudes u observaciones adicionales, indíquelas a continuación. "></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn prev">Atrás</button>
+          <button type="submit" class="btn submit">Enviar Solicitud</button>
+        </div>
+      </section>
+
+    </form>
+  </main>
+  <pre id="result"></pre>
+
+  <script src="js/validations.js"></script>
+  <script src="js/steps.js"></script>
+  <script src="js/form.js"></script>
+</body>
+
+</html>
