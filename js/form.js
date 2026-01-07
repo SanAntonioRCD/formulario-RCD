@@ -5,7 +5,7 @@ const spinner = document.getElementById("spinner");
 const resetFormBtn = document.getElementById("resetFormBtn");
 
 const BACKEND_URL =
-  "https://script.google.com/macros/s/AKfycbywNOq4Tba0R6wcc6KXxNNuf_ltB-rsRIIZl2Fx2DyT-nYcFDRnJ8pQvAkiOKVkIr5rgw/exec";
+  "https://script.google.com/macros/s/AKfycbwiBAqKXtU3ikB7LHnYuKbvtjL8lCZERAKg86FUmwJToag2t39doO413u5ORTg6HmqOjQ/exec";
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
