@@ -5,32 +5,92 @@ const spinner = document.getElementById("spinner");
 const resetFormBtn = document.getElementById("resetFormBtn");
 
 const BACKEND_URL =
-  "https://script.google.com/macros/s/AKfycbxDIU-oVuIWzVvnkFJMZUS0-Z43DaVmqIBPY-jA3Jj30Vfz-WHrDT8FvRQZL5kLGdGzGA/exec";
+  "https://script.google.com/macros/s/AKfycbwqytfcE0WNRTZsEAuFOeuM5BpTpEJ_UOs6faXSahLgcS6EX5AoudipK0uYuzJxGWoZxg/exec";
+
+// --- FUNCIÓN PARA SUBIDA RESUMIBLE (ELIMINA EL LÍMITE DE 50MB) ---
+async function uploadFileResumable(file, folderId, accessToken) {
+  const metadata = {
+    name: file.name,
+    mimeType: file.type,
+    parents: [folderId],
+  };
+
+  // 1. Iniciar sesión de subida
+  const response = await fetch(
+    "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable",
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Upload-Content-Type": file.type,
+        "X-Upload-Content-Length": file.size,
+      },
+      body: JSON.stringify(metadata),
+    }
+  );
+
+  if (!response.ok) throw new Error("No se pudo iniciar la subida a Drive");
+
+  const location = response.headers.get("Location");
+
+  // 2. Subir el archivo binario
+  const uploadResponse = await fetch(location, {
+    method: "PUT",
+    headers: { "Content-Type": file.type },
+    body: file,
+  });
+
+  if (!uploadResponse.ok) throw new Error("Fallo al subir el archivo");
+
+  const result = await uploadResponse.json();
+  return `https://drive.google.com/file/d/${result.id}/view`;
+}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // Validar último paso antes de enviar
   const lastStep = document.querySelector('.step[data-step="3"]');
   if (!validateStep(lastStep)) return;
 
   try {
-    const formData = new FormData(form);
-
     // Preparar UI
     loader.classList.remove("hidden");
     spinner.classList.remove("hidden");
     resetFormBtn.classList.add("hidden");
-    loaderText.textContent = "Enviando información...";
+    loaderText.textContent = "Obteniendo autorización...";
     loaderText.style.color = "black";
 
-    // Procesar archivos
+    // 1. Obtener Token de Acceso desde el Backend (doGet)
+    const authRes = await fetch(`${BACKEND_URL}?action=getToken`);
+    const authData = await authRes.json();
+    const { token, folderId } = authData;
+
+    const formData = new FormData(form);
     const infoViajesFile = formData.get("info_viajes");
     const valesFile = formData.get("vales_escaneados");
-    const infoViajesBase64 = await fileToBase64(infoViajesFile);
-    const valesBase64 = await fileToBase64(valesFile);
 
-    // Construir Objeto
+    let infoViajesUrl = "";
+    let valesUrl = "";
+
+    // 2. Subir Archivos Directamente a Drive
+    if (infoViajesFile && infoViajesFile.size > 0) {
+      loaderText.textContent = "Subiendo archivo de viajes...";
+      infoViajesUrl = await uploadFileResumable(
+        infoViajesFile,
+        folderId,
+        token
+      );
+    }
+
+    if (valesFile && valesFile.size > 0) {
+      loaderText.textContent =
+        "Subiendo vales escaneados (esto puede tardar)...";
+      valesUrl = await uploadFileResumable(valesFile, folderId, token);
+    }
+
+    // 3. Construir Objeto final (Solo texto y links)
+    loaderText.textContent = "Registrando solicitud en el sistema...";
     const data = {
       correo_adicional: formData.get("correo_adicional"),
       autorizacion_datos: !!formData.get("autorizacion_datos"),
@@ -50,16 +110,11 @@ form.addEventListener("submit", async (e) => {
       contrato_idu: formData.get("contrato_idu") || "No",
       numero_contrato_idu: formData.get("numero_contrato_idu") || "N/A",
 
-      info_viajes: {
-        nombre: infoViajesFile.name,
-        mimeType: infoViajesFile.type,
-        base64: infoViajesBase64,
-      },
-      vales_escaneados: {
-        nombre: valesFile.name,
-        mimeType: valesFile.type,
-        base64: valesBase64,
-      },
+      // Links y nombres para el backend
+      info_viajes_url: infoViajesUrl,
+      info_viajes_nombre: infoViajesFile.name,
+      vales_url: valesUrl,
+      vales_escaneados_nombre: valesFile.name,
 
       requiere_anexo_ii: formData.get("requiere_anexo_ii") || "No",
       anexo_ii_info: formData.get("anexo_ii_info"),
@@ -71,6 +126,7 @@ form.addEventListener("submit", async (e) => {
       observaciones: formData.get("observaciones"),
     };
 
+    // 4. Enviar datos al doPost (ahora la carga es mínima)
     const response = await fetch(BACKEND_URL, {
       method: "POST",
       body: JSON.stringify(data),
@@ -83,9 +139,9 @@ form.addEventListener("submit", async (e) => {
       loaderText.textContent = "✅ ¡Solicitud enviada con éxito!";
       loaderText.style.color = "green";
       resetFormBtn.classList.remove("hidden");
-      form.reset(); // Limpiar formulario detrás
+      form.reset();
     } else {
-      throw new Error("El servidor respondió con un error.");
+      throw new Error(res.message || "Error en el servidor");
     }
   } catch (err) {
     spinner.classList.add("hidden");
