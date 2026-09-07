@@ -8,7 +8,7 @@ const resetFormBtn = document.getElementById("resetFormBtn");
 //"https://script.google.com/macros/s/AKfycbxDIU-oVuIWzVvnkFJMZUS0-Z43DaVmqIBPY-jA3Jj30Vfz-WHrDT8FvRQZL5kLGdGzGA/exec";
 
 const BACKEND_URL =
-  "https://script.google.com/macros/s/AKfycbx47PjV31HxI80y3oeIR2AEIRx8txHoTQs8UwkmiMAC3bbcmctW_ztALKgj9IfimLXHbw/exec";
+  "https://script.google.com/macros/s/AKfycbwZH8V6tm5d-NaM98-B2va5bi3rdHXL6JOqk_cCfHvcM3r7HojJXtLLrFdR17DOXiq-Zw/exec";
 
 // --- FUNCIÓN PARA SUBIDA RESUMIBLE (ELIMINA EL LÍMITE DE 50MB) ---
 async function uploadFileResumable(file, folderId, accessToken) {
